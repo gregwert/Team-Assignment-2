@@ -56,9 +56,9 @@ calc_number_sig <- function(x){
   
   lm.1 <- lm(y ~ ., data = df)
   
-  var_probs <- pull(as_tibble(summary(lm.1)$coefficients)[4])
+  var_probs <- pull(as_tibble(summary(lm.1)$coefficients)[4])[-1]
   
-  length(var_probs[var_probs < 0.025])
+  length(var_probs[var_probs < 0.05])
   
 }
 
