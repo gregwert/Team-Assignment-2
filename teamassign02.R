@@ -41,4 +41,30 @@
 #   (d) Determine and report the proportion of significant variables in the 100
 #       simulations. Compare this proportion with the expected theoretical value.
 
+library(tidyverse)
+
+data02 <- read_csv("teamassign02data02.csv")
+data02
+
+set.seed(2)
+
+calc_number_sig <- function(x){
+  
+  y <- rnorm(100, mean = 10, sd = 5)
+  
+  df <- as_tibble(cbind(y,data02))
+  
+  lm.1 <- lm(y ~ ., data = df)
+  
+  var_probs <- pull(as_tibble(summary(lm.1)$coefficients)[4])
+  
+  length(var_probs[var_probs < 0.025])
+  
+}
+
+sum(sapply(1:100, calc_number_sig))
+# 100 total significant variables at 5% level, across all 100 iterations together
+
+# Expected theoretical number: 100
+
 
