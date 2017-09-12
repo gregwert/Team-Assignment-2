@@ -46,7 +46,7 @@ mlreg.model <- lm(y ~ ., data2)
 #   (c) Determine the number of significant explanatory variables at the 5% level.
 # summary(mlreg.model)
 # names(summary(mlreg.model)$coefficients[,4])[summary(mlreg.model)$coefficients[,4] <= .05] # This will return the full list of parameter estimates significant at the 5% level
-names(summary(mlreg.model)$coefficients[,4])[summary(mlreg.model)$coefficients[,4] <= .05] %>%
+names(summary(mlreg.model)$coefficients[,4][-1])[summary(mlreg.model)$coefficients[,4][-1] <= .05] %>%
   length()
 # OUTPUT: 2
 #   (d) Determine and report the proportion of significant variables in the 100
@@ -59,11 +59,11 @@ num_significant <- sapply(X = 1:num_simulations, function(X, data2){
   # (b)
   mlreg.model <- lm(y ~ ., data2)
   # (c)
-  num_significant <- names(summary(mlreg.model)$coefficients[,4])[summary(mlreg.model)$coefficients[,4] <= .05] %>%
+  num_significant <- names(summary(mlreg.model)$coefficients[,4][-1])[summary(mlreg.model)$coefficients[,4][-1] <= .05] %>%
     length()
 }, data2 = data2)
 # The following is the proportion of significant variables
-sum(num_significant) / (num_simulations * NCOL(data2))
-# OUTPUT: 6.9%
+sum(num_significant) / (num_simulations * (NCOL(data2) - 1)) # Make sure to remove the B_0 column
+# OUTPUT: 4.65%
 # We should expect only 5% of all variables to be significant considering that we generated y to be completely random and unrelated to x.
 # So at a 5% significance level, we'd expect only 5% of variables to be significant just by chance
